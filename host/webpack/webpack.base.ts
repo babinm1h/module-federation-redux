@@ -46,7 +46,8 @@ const baseConfig = (mode: Configuration["mode"]): Configuration => {
         shared: {
           react: {
             requiredVersion: packs.dependencies.react,
-            singleton: true,
+            singleton: true,  // нельзя несколько версий
+            eager: true,  // используем общий модуль при начальной загрузке
           },
 
           ["react-dom"]: {
