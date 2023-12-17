@@ -1,11 +1,17 @@
-import React from "react";
-import Logo from "./components/Logo";
+import React, { Suspense } from "react";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
+
+const AdminMain = React.lazy(() => import("./pages/AdminMain/AdminMain"));
+const PostPage = React.lazy(() => import("./pages/PostPage/PostPage"));
 
 const App = () => {
   return (
-    <div>
-      <Logo />
-    </div>
+    <Suspense fallback={<div>LOADING...</div>}>
+      <Routes>
+        <Route index element={<AdminMain />} />
+        <Route path="/:id/*" element={<PostPage />} />
+      </Routes>
+    </Suspense>
   );
 };
 

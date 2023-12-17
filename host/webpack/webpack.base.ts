@@ -7,7 +7,7 @@ import MiniCssExtractPlugin from "mini-css-extract-plugin";
 
 import packs from "../package.json";
 
-const baseConfig = (mode: Configuration["mode"]): Configuration => {
+const baseConfig = (mode: Configuration["mode"], env: any): Configuration => {
   const isDevMode = mode !== "production";
 
   return {
@@ -22,7 +22,7 @@ const baseConfig = (mode: Configuration["mode"]): Configuration => {
       path: PATHS.build,
       filename: "[name].[contenthash].js",
       clean: true,
-      publicPath: 'auto',
+      publicPath: "auto",
       assetModuleFilename: "assets/[hash][ext]",
     },
 
@@ -31,7 +31,7 @@ const baseConfig = (mode: Configuration["mode"]): Configuration => {
       new HtmlWebpackPlugin({
         title: "MF Host",
         favicon: "public/log.png",
-        publicPath: 'auto',
+        publicPath: process.env.PUBLIC_PATH,
         template: resolveFromRoot("src/index.html"),
         minify: false,
       }),
@@ -39,20 +39,32 @@ const baseConfig = (mode: Configuration["mode"]): Configuration => {
 
       // ====================
       new webpack.container.ModuleFederationPlugin({
-        name: "host",
+        name: "host", //  имя микрофронта контейнера
+        filename: "remoteEntry.js", //  имя файла который будем подключать к хосту
+
         remotes: {
-          components: "components@http://localhost:3010/remoteEntry.js",
+          app1: "app1@http://localhost:3010/remoteEntry.js",
         },
+
+        exposes: {
+          "./MainLayout": resolveFromRoot("src/components/MainLayout/MainLayout"),
+          "./Host": resolveFromRoot("src/App.tsx"),
+          "./AuthContext": resolveFromRoot("src/context/AuthContext"),
+        },
+
         shared: {
+          ...packs.dependencies,
           react: {
-            requiredVersion: packs.dependencies.react,
-            singleton: true,
+            eager: true, // загружать модуль сразу после того, как был загружен инициализирующий модуль / общий модуль будет загружен сразу при инициализации приложения, а не по требованию
+            requiredVersion: packs.dependencies["react"], // версию общего модуля, которая должна быть загружена.
+            singleton: true, // позволяет использовать только одну версию общего модуля
           },
 
-          ["react-dom"]: {
-            requiredVersion: packs.dependencies["react-dom"],
-            singleton: true,
-          },
+          "react-router-dom": { eager: true, requiredVersion: packs.dependencies["react-router-dom"] },
+
+          "react-dom": { eager: true, requiredVersion: packs.dependencies["react-dom"] },
+
+          "./src/context/AuthContext": {},
         },
       }),
     ],

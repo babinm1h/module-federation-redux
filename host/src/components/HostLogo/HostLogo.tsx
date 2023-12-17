@@ -1,6 +1,6 @@
 import React from "react";
 import s from "./HostLogo.module.scss";
-import img from "../assets/log.png";
+import img from "@/assets/log.png";
 
 const HostLogo = () => {
   return (

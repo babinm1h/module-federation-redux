@@ -1,1 +1,4 @@
-import("./bootstrap");
+import("./bootstrap.tsx");
+
+export {};
+

@@ -5,8 +5,9 @@ import { merge } from "webpack-merge";
 import baseConfig from "./webpack.base";
 import webpack from "webpack";
 
-const devConfig: CallableOption = () => {
-  return merge(baseConfig("development"), {
+const devConfig: CallableOption = (env:any) => {
+  console.log(env);
+  return merge(baseConfig("development", env), {
     cache: true,
     devtool: "source-map",
 

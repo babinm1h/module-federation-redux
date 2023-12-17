@@ -7,7 +7,8 @@ import MiniCssExtractPlugin from "mini-css-extract-plugin";
 
 import packs from "../package.json";
 
-const baseConfig = (mode: Configuration["mode"]): Configuration => {
+const baseConfig = (mode: Configuration["mode"], env: any): Configuration => {
+  console.log(env);
   const isDevMode = mode !== "production";
 
   return {
@@ -31,7 +32,7 @@ const baseConfig = (mode: Configuration["mode"]): Configuration => {
       new HtmlWebpackPlugin({
         title: "MF App1",
         favicon: "public/log.png",
-        publicPath: "auto",
+        publicPath: process.env.PUBLIC_PATH,
         template: resolveFromRoot("src/index.html"),
         minify: false,
       }),
@@ -39,22 +40,31 @@ const baseConfig = (mode: Configuration["mode"]): Configuration => {
 
       //==========
       new webpack.container.ModuleFederationPlugin({
-        name: "components",
-        library: { type: "var", name: "components" },
+        name: "app1",
         filename: "remoteEntry.js",
-        exposes: {
-          "./LogoBlock": resolveFromRoot("src/components/Logo"),
+
+        remotes: {
+          host: "host@http://localhost:3009/remoteEntry.js",
         },
+
+        exposes: {
+          "./PostPage": resolveFromRoot("src/pages/PostPage/PostPage.tsx"),
+          "./AdminService": resolveFromRoot("src/pages/AdminMain/AdminMain.tsx"),
+          "./App1": resolveFromRoot("src/App.tsx"),
+        },
+
         shared: {
+          // определяет модули, которые будут совместно использоваться (shared) между различными приложениями
+          ...packs.dependencies,
           react: {
-            requiredVersion: packs.dependencies.react,
-            singleton: true,
+            eager: true, // загружать модуль сразу после того, как был загружен инициализирующий модуль
+            requiredVersion: packs.dependencies["react"],
+            singleton: true, // позволяет использовать только одну версию общего модуля
           },
 
-          ["react-dom"]: {
-            requiredVersion: packs.dependencies["react-dom"],
-            singleton: true,
-          },
+          "react-router-dom": { eager: true, requiredVersion: packs.dependencies["react-router-dom"] },
+
+          "react-dom": { eager: true, requiredVersion: packs.dependencies["react-dom"] },
         },
       }),
     ],

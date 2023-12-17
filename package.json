@@ -1,0 +1,23 @@
+{
+  "name": "federation",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "start": "pnpm --filter federation_* --parallel start",
+    "build": "pnpm --filter federation_* build",
+    "serve": "pnpm --filter federation_* --parallel serve",
+    "clean": "pnpm --filter federation_* --parallel clean"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/babinm1h/module-federation.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/babinm1h/module-federation/issues"
+  },
+  "homepage": "https://github.com/babinm1h/module-federation#readme"
+}
+

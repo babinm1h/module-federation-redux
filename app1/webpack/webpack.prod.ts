@@ -12,8 +12,9 @@ export function getFilename({ isDevMode, isChunk, path, pathAsExt }: any): strin
   return `${path}/${name}.${extension}`;
 }
 
-const prodConfig: CallableOption = () =>
-  merge(baseConfig("production"), {
+const prodConfig: CallableOption = (env:any) => {
+  console.log(env);
+  return merge(baseConfig("production", env), {
     optimization: {
       usedExports: true,
       minimize: true,
@@ -39,6 +40,6 @@ const prodConfig: CallableOption = () =>
       }),
     ],
   });
-
+};
 export default prodConfig;
 

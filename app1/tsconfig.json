@@ -1,25 +1,31 @@
 {
   "compilerOptions": {
+    "outDir": "./build/",
+    "noImplicitAny": true,
     "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": false,
     "jsx": "react-jsx",
+    "allowJs": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "module": "ESNext",
+    "resolveJsonModule": true,
     "baseUrl": ".",
 
     "paths": {
-      "@/*": ["src/*"],
+      "@/*": ["src/*"]
     }
   },
-  "include": ["./declaration.d.ts", "./config/**/*", "./src/**/*", "./*.ts"]
+
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS"
+    }
+  },
+
+  "include": ["./declaration.d.ts", "./config/**/*", "./src/**/*", "./*.ts"],
+  "exclude": [
+    "./build/**/*" // This is what fixed it!
+  ]
 }
+
