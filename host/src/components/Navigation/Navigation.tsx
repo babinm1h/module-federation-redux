@@ -21,6 +21,7 @@ const Navigation = () => {
       <NavLink to="/">Host-Home</NavLink>
       <NavLink to="/auth">Host-Auth</NavLink>
       <NavLink to="/admin">App1-Admin</NavLink>
+      <NavLink to="/admin/chat">App1-Chat</NavLink>
 
       {auth.user && (
         <div>

@@ -1,0 +1,17 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  .msg {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background-color: #fff;
+    padding: 8px;
+    border-radius: 8px;
+    &.ownMsg {
+      background-color: rgb(164, 211, 255);
+    }
+  }
+}
+
