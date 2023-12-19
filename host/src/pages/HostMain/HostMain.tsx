@@ -1,12 +1,7 @@
 import HostLogo from "@/components/HostLogo/HostLogo";
 import React, { useEffect, useState } from "react";
 import s from "./HostMain.module.scss";
-
-interface IUser {
-  name: string;
-  id: number;
-  email: string;
-}
+import { IUser } from "@/models/user.model";
 
 const HostMain = () => {
   const [users, setUsers] = useState<IUser[]>([]);

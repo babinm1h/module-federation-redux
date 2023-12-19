@@ -5,3 +5,8 @@ declare module "host/AuthContext" {
   const AuthContextProvider: React.FC;
 }
 
+declare module "state/store" {
+  export const store: any;
+  export const addReducer: (name: string, currentReducers: any) => void;
+}
+

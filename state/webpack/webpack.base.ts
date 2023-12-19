@@ -8,7 +8,6 @@ import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import packs from "../package.json";
 
 const baseConfig = (mode: Configuration["mode"], env: any): Configuration => {
-  console.log(env);
   const isDevMode = mode !== "production";
 
   return {
@@ -30,36 +29,32 @@ const baseConfig = (mode: Configuration["mode"], env: any): Configuration => {
     plugins: [
       new CleanWebpackPlugin(),
       new HtmlWebpackPlugin({
-        title: "MF App1",
-        favicon: "public/log.png",
+        title: "MF States",
         publicPath: process.env.PUBLIC_PATH,
         template: resolveFromRoot("src/index.html"),
         minify: false,
       }),
       new MiniCssExtractPlugin(),
 
-      //==========
+      // ====================
       new webpack.container.ModuleFederationPlugin({
-        name: "app1",
-        filename: "remoteEntry.js",
+        name: "state", //  имя микрофронта контейнера
+        filename: "remoteEntry.js", //  имя файла который будем подключать к хосту
 
         remotes: {
+          app1: "app1@http://localhost:3010/remoteEntry.js",
           host: "host@http://localhost:3009/remoteEntry.js",
-          state: "state@http://localhost:3008/remoteEntry.js",
         },
 
         exposes: {
-          "./PostPage": resolveFromRoot("src/pages/PostPage/PostPage.tsx"),
-          "./AdminService": resolveFromRoot("src/pages/AdminMain/AdminMain.tsx"),
-          "./App1": resolveFromRoot("src/App.tsx"),
+          "./store": resolveFromRoot("src/store/index.ts"),
         },
 
         shared: {
-          // определяет модули, которые будут совместно использоваться (shared) между различными приложениями
           ...packs.dependencies,
           react: {
-            eager: true, // загружать модуль сразу после того, как был загружен инициализирующий модуль
-            requiredVersion: packs.dependencies["react"],
+            eager: true, // загружать модуль сразу после того, как был загружен инициализирующий модуль / общий модуль будет загружен сразу при инициализации приложения, а не по требованию
+            requiredVersion: packs.dependencies["react"], // версию общего модуля, которая должна быть загружена.
             singleton: true, // позволяет использовать только одну версию общего модуля
           },
 
@@ -133,4 +128,3 @@ const baseConfig = (mode: Configuration["mode"], env: any): Configuration => {
 };
 
 export default baseConfig;
-

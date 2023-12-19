@@ -24,25 +24,25 @@ const Chat = () => {
     if (!user) return;
     const socket = socketRef.current;
 
-    socket.onmessage = (e) => {
-      const message = JSON.parse(e.data);
+    socket.onmessage = (ev) => {
+      const message = JSON.parse(ev.data);
       console.log("msg", message);
       setMessages((prev) => [message, ...prev]);
     };
 
-    socket.onopen = (e) => {
-      console.log(e, "Socket connected");
+    socket.onopen = (ws) => {
+      console.log(ws, "Socket connected");
       setConnected(true);
       const message = { event: "connect", id: Date.now(), user: user.name };
       socket.send(JSON.stringify(message));
     };
 
-    socket.onerror = (e) => {
-      console.log(e, "Socket error");
+    socket.onerror = (ev) => {
+      console.log(ev, "Socket error");
     };
 
-    socket.onclose = (e) => {
-      console.log(e, "Socket closed");
+    socket.onclose = (ev) => {
+      console.log(ev, "Socket closed");
       setConnected(false);
     };
   }, [user]);

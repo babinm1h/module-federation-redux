@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "outDir": "./build/",
+    "noImplicitAny": true,
+    "target": "es5",
+    "jsx": "react-jsx",
+    "allowJs": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "module": "ESNext",
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS"
+    }
+  },
+
+  "include": ["./declaration.d.ts", "./config/**/*", "./src/**/*", "./*.ts"],
+  "exclude": [
+    "./build/**/*" // This is what fixed it!
+  ]
+}
+

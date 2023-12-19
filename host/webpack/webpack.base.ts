@@ -44,6 +44,7 @@ const baseConfig = (mode: Configuration["mode"], env: any): Configuration => {
 
         remotes: {
           app1: "app1@http://localhost:3010/remoteEntry.js",
+          state: "state@http://localhost:3008/remoteEntry.js",
         },
 
         exposes: {

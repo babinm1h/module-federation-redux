@@ -2,6 +2,8 @@ import Logo from "@/components/Logo";
 import React, { useEffect, useState } from "react";
 import s from "./AdminMain.module.scss";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { postsSliceActions } from "@/slices/posts.slice";
 
 interface IPost {
   id: number;
@@ -9,8 +11,9 @@ interface IPost {
 }
 
 const AdminMain = () => {
-  const [posts, setPosts] = useState<IPost[]>([]);
   const nav = useNavigate();
+  const dispatch = useDispatch();
+  const { posts } = useSelector((state: any) => state?.posts);
 
   const handleUserClick = (id: number) => {
     return () => {
@@ -30,7 +33,7 @@ const AdminMain = () => {
   useEffect(() => {
     asyncFetchGenerator()
       .next()
-      .then((res) => setPosts(res.value));
+      .then((res) => dispatch(postsSliceActions.setPosts(res.value)));
   }, []);
 
   return (
@@ -38,7 +41,7 @@ const AdminMain = () => {
       Admin app1
       <Logo />
       <div className={s.list}>
-        {posts.map((p) => (
+        {(posts as IPost[]).map((p) => (
           <div key={p.id} className={s.item} onClick={handleUserClick(p.id)}>
             <span>{p.id}</span>
             <span>{p.title}</span>
